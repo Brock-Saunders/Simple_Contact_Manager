@@ -4,9 +4,22 @@
          <link href="css/styles.css" rel="stylesheet">	
     </head>
     <body>
-        <h1 id="title">Contact Manager</h1>
-        <div id="createUser">
-            <button>Create New User</button>
+        <div class="container">
+            <h1 id="title">Contact Manager</h1>
+            <div id="createUser">
+                <button class="primary-button">Create New User</button>
+            </div>
+        </div>  
+        <div class="login-container">
+            <form id="loginForm">
+                <div class="form-group">
+                    <input type="text" id="username" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="primary-button">Sign In</button>
+            </form>
         </div>
     </body>
 </html>
