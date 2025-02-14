@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/> <!-- chars displayed correctly-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- formatting for phone screens -->
+    <title>Contact Manager</title>
+    <link rel="stylesheet" href="css/styles.css"> <!-- linking css-->
+</head>
+<body>
+    
+
+    <header>
+        <div class="container">
+            <h1 id="title">Welcome to Contact Manager</h1>
+            <button id="logoutButton" class="primary-button">Logout</button> 
+        </div>
+    </header>
+
+    <div class="container">
+        <section id="contactForm">
+            <h2>Add a new contact</h2>
+            <form id="newContactForm">
+                <div class="form-group">
+                    <label for="contactFirstName">First Name:</label>
+                    <input type="text" id="contactFirstName" name="contactFirstName" placeholder="Enter your first name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="contactLastName">Last Name:</label> 
+                    <input type="text" id="contactLastName" name="contactLastName" placeholder="Enter your last name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="contactNum">Phone Number:</label>
+                    <input type="tel" id="contactNum" name="contactNum" placeholder="Enter your phone number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="contactEmail">Email:</label>
+                    <input type="email" id="contactEmail" name="contactEmail" placeholder="Enter your email" required>
+                </div>
+
+                <button type="button" id="addContactButton" class="primary-button" onclick="addContact();">Add Contact</button>
+            </form>
+        </section>
+        <div id="addContactResult"></div>
+
+        <section id="searchContact">
+            <h2>Search for a Contact</h2>
+            <div class="form-group">
+                <input type="text" id="searchInput" placeholder="Enter name or email">
+                <button id="searchButton" class="primary-button" onclick="searchContact()">Search</button>
+            </div>
+            <div id="searchResult"></div>
+        </section>
+    
+        <h2>Your Contacts</h2>
+        <ul id="contact-list"></ul>
+    </div>
+
+    <script src="js/addContact.js"></script>
+</body>
+</html>
