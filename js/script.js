@@ -24,7 +24,7 @@ window.addEventListener('click', (e) => {
     }
 });
 
-// Handle form submission
+// Handle create user form submission
 createUserForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
@@ -57,6 +57,47 @@ createUserForm.addEventListener('submit', (e) => {
                 }
             } else {
                 alert('Error creating user. Please try again.');
+                console.error(xhr.statusText);
+            }
+        }
+    };
+
+    let jsonPayload = JSON.stringify({
+        username: username,
+        password: password
+    });
+
+    xhr.send(jsonPayload);
+});
+
+// Handle login form submission
+const loginForm = document.getElementById('loginForm');
+
+loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    let xhr = new XMLHttpRequest();
+    let url = urlBase + 'LAMPAPI/Login.' + extension;
+
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            let response = JSON.parse(xhr.responseText);
+            
+            if (xhr.status === 200) {
+                if (response.error) {
+                    alert(response.error);
+                } else {
+                    alert('Login successful!');
+                    // Redirect to another page or perform other actions
+                }
+            } else {
+                alert('Error logging in. Please try again.');
                 console.error(xhr.statusText);
             }
         }
