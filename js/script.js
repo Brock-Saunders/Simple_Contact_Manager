@@ -31,6 +31,10 @@ createUserForm.addEventListener('submit', (e) => {
     const username = document.getElementById('newUsername').value;
     const password = document.getElementById('newPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
 
     if (password !== confirmPassword) {
         alert('Passwords do not match!');
@@ -64,7 +68,11 @@ createUserForm.addEventListener('submit', (e) => {
 
     let jsonPayload = JSON.stringify({
         username: username,
-        password: password
+        password: password,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phone: phone
     });
 
     xhr.send(jsonPayload);
