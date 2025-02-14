@@ -1,7 +1,6 @@
 <?php
 
     // Test this on my pc. I used Bruno to test it and it is working as of now. Will tweak to our server when integrated.
-
     function getRequestData(){
         return json_decode(file_get_contents('php://input'), true);
     }
@@ -29,7 +28,7 @@
     $password = $inData["Password"];
 
     //start connection to DB using host(server), db user, db password, db name
-    $conn = new mysqli("localhost", "root", "testpass", "contact");
+    $conn = new mysqli("localhost", "webuser", "testpassword", "contact");
 
     if($conn->connect_error){
         returnWithError("Couldnt Connect to DB: " . $conn->connect_error);
@@ -62,4 +61,4 @@
 
 
 
-?>
+?> 
