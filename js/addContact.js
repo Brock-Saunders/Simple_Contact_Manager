@@ -47,8 +47,9 @@ function addContact() {
 
 
 function searchContact() {
-
-
+	// gets search input valaues
+	let searchInput = document.getElementById("searchInput").value;
+	document.getElementById("searchResult").innerHTML="";//clear contents again
 }
 
 
