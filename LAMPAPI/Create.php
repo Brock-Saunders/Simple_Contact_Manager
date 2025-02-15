@@ -28,7 +28,7 @@
     $password = $inData["Password"];
 
     //start connection to DB using host(server), db user, db password, db name
-    $conn = new mysqli("localhost", "webuser", "PersonaGaru18", "contact");
+    $conn = new mysqli("localhost", "webuser", "testpassword", "contact");
 
     if($conn->connect_error){
         returnWithError("Couldnt Connect to DB: " . $conn->connect_error);
