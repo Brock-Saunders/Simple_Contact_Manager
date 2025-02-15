@@ -14,16 +14,15 @@ function sendResultInfoAsJson($obj) {
 //returns error in json format and stops execution
 function returnWithError($err){
     $retValue = json_encode(["error" => $err]);
-    sendResultInforAsJson($retValue);
+    sendResultInfoAsJson($retValue);
     exit();
 }
 
 //returns a success message w/ user id in json format
-function returnWithInfo($id, $username)
-	{
-		$retValue = '{"id":' . $id . ',"username":"' . $username . '","error":""}';
-		sendResultInfoAsJson($retValue);
-	}
+function returnWithInfo($id, $username){
+	$retValue = '{"id":' . $id . ',"username":"' . $username . '","error":""}';
+	sendResultInfoAsJson($retValue);
+}
 
 //grab json data
 $inData = getRequestData();
@@ -31,6 +30,11 @@ $inData = getRequestData();
 //extract user and password
 $username = $inData["username"];
 $password = $inData["password"];
+
+//if missing either
+if ($username === "" || $password === "") {
+    returnWithError("Missing username or password");
+}
 
 //connect to db
 $conn = new mysqli("localhost", "root", "testpass", "contact");
@@ -40,32 +44,30 @@ if($conn->connect_error){
 }
 
 //sql query to find user
-$sql = "SELECT ID, password FROM users WHERE username='" . $username . "'";
-$result = $conn->query($sql);
+$stmt = $conn->prepare("SELECT ID, password FROM users WHERE username = ?");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
 
 //check if users match
-    if ($result->num_rows > 0)
-    {
-        //fetch first row
-        $row = $result->fetch_assoc();
-        
-        //compare password from the request with db value
-        if ($password === $row["password"])
-        {
-            //successful login
-            returnWithInfo($row["ID"], $username);
-        }
-        else
-        {
-            //password did not match
-            returnWithError("Invalid password.");
-        }
+if ($result->num_rows > 0){
+    //fetch first row
+    $row = $result->fetch_assoc();
+    
+    //compare password from the request with db value
+    if ($password === $row["password"]){
+        //successful login
+        returnWithInfo($row["ID"], $username);
     }
-    else
-    {
-        //no matching username in db
-        returnWithError("User not found.");
+    else{
+        //password did not match
+        returnWithError("Invalid password.");
     }
+}
+else{
+    //no matching username in db
+    returnWithError("User not found.");
+}
 
-		$conn->close();
-?>
+$stmt->close();
+$conn->close();
