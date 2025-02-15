@@ -78,11 +78,11 @@ const loginForm = document.getElementById('loginForm');
 loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+    let username = document.getElementById('username').value;
+    let password = document.getElementById('password').value;
 
     let xhr = new XMLHttpRequest();
-    let url = urlBase + 'LAMPAPI/Login.' + extension;
+    let url = urlBase + '/Login.' + extension;
 
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -106,9 +106,10 @@ loginForm.addEventListener('submit', (e) => {
     };
 
     let jsonPayload = JSON.stringify({
-        username: username,
-        password: password
+        Login: username,
+        Password: password
     });
+    console.log("Sending Request Data:", jsonPayload);
 
     xhr.send(jsonPayload);
 });
