@@ -1,4 +1,4 @@
-const urlBase = 'https://practestah.ahclass.xyz/';
+const urlBase = 'http://localhost/LAMPAPI'
 const extension = 'php';
 
 // Popup functionality
@@ -6,6 +6,13 @@ const createUserBtn = document.getElementById('createUserBtn');
 const createUserPopup = document.getElementById('createUserPopup');
 const closeBtn = document.querySelector('.close-btn');
 const createUserForm = document.getElementById('createUserForm');
+
+//PHP ENDPOINTS
+let createEndPoint = `${urlBase}/Create.${extension}`;
+
+let userID = 0;
+let firstName = "";
+let lastName = "";
 
 // Open popup
 createUserBtn.addEventListener('click', () => {
@@ -27,56 +34,43 @@ window.addEventListener('click', (e) => {
 // Handle form submission
 createUserForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    
-    const username = document.getElementById('newUsername').value;
-    const password = document.getElementById('newPassword').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-    const firstName = document.getElementById('firstName').value;
-    const lastName = document.getElementById('lastName').value;
-    const email = document.getElementById('email').value;
-    const phone = document.getElementById('phone').value;
-
-    if (password !== confirmPassword) {
-        alert('Passwords do not match!');
-        return;
-    }
-
-    let xhr = new XMLHttpRequest();
-    let url = urlBase + 'LAMPAPI/Create.' + extension;
-
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            let response = JSON.parse(xhr.responseText);
-            
-            if (xhr.status === 200) {
-                if (response.error) {
-                    alert(response.error);
-                } else {
-                    alert('User created successfully!');
-                    createUserPopup.style.display = 'none';
-                    createUserForm.reset();
-                }
-            } else {
-                alert('Error creating user. Please try again.');
-                console.error(xhr.statusText);
-            }
-        }
+  
+    firstName = document.getElementById('firstName').value;
+    lastName = document.getElementById('lastName').value;
+    let password = document.getElementById('confirmPassword').value;
+    let login = document.getElementById('newUsername').value;
+    let email = document.getElementById('email').value;
+    let phone = document.getElementById('phone').value;
+  
+    let reqData = {
+      FirstName: firstName,
+      LastName: lastName,
+      Login: login,
+      Email: email,
+      Phone: phone,
+      Password: password
     };
-
-    let jsonPayload = JSON.stringify({
-        username: username,
-        password: password,
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        phone: phone
-    });
-
+    
+  
+    console.log("Sending Request Data:", reqData);
+  
+    let jsonPayload = JSON.stringify(reqData);
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", createEndPoint, true);
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+    xhr.onreadystatechange = function(){
+      if(this.readyState == 4 && this.status == 200){
+        let jsonObject = JSON.parse(xhr.responseText);
+        userID = jsonObject.userID;
+        console.log("User created with ID:", userID);
+      }
+      else{
+        console.error("Error: ", xhr.status, xhr.responseText);
+      }
+    }
     xhr.send(jsonPayload);
-});
+  
+  });
 
 // Handle login form submission
 const loginForm = document.getElementById('loginForm');
@@ -84,11 +78,11 @@ const loginForm = document.getElementById('loginForm');
 loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+    let username = document.getElementById('username').value;
+    let password = document.getElementById('password').value;
 
     let xhr = new XMLHttpRequest();
-    let url = urlBase + 'LAMPAPI/Login.' + extension;
+    let url = urlBase + '/Login.' + extension;
 
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -112,9 +106,10 @@ loginForm.addEventListener('submit', (e) => {
     };
 
     let jsonPayload = JSON.stringify({
-        username: username,
-        password: password
+        Login: username,
+        Password: password
     });
+    console.log("Sending Request Data:", jsonPayload);
 
     xhr.send(jsonPayload);
 });

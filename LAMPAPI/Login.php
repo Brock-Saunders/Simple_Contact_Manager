@@ -1,71 +1,61 @@
 <?php
 
-//reads JSON from request and returns as an array
+
 function getRequestData(){
     return json_decode(file_get_contents('php://input'), true);
 }
 
-//sends object as a json repsonse
-function sendResultInfoAsJson($obj) {
+
+function sendResultAsJson($obj) {
     header('Content-type: application/json');
     echo $obj;
 }
 
-//returns error in json format and stops execution
+
 function returnWithError($err){
     $retValue = json_encode(["error" => $err]);
-    sendResultInforAsJson($retValue);
+    sendResultAsJson($retValue);
     exit();
 }
 
-//returns a success message w/ user id in json format
-function returnWithInfo($id, $username)
-	{
-		$retValue = '{"id":' . $id . ',"username":"' . $username . '","error":""}';
-		sendResultInfoAsJson($retValue);
-	}
 
-//grab json data
 $inData = getRequestData();
 
-//extract user and password
-$username = $inData["username"];
-$password = $inData["password"];
 
-//connect to db
-$conn = new mysqli("localhost", "root", "testpass", "contact");
-//check if connection fails
+$login = $inData["Login"];
+$password = $inData["Password"];
+
+$conn = new mysqli("localhost", "webuser", "testpassword", "contact");
+
 if($conn->connect_error){
-    returnWithError("Couldnt Connect to DB: " . $conn->connect_error);
+    returnWithError("Couldn't Connect to DB: " . $conn->connect_error);
 }
+else{
+    // Prepare the SQL query to check if the user exists
+    $stmt = $conn->prepare("SELECT ID, FirstName, LastName FROM Users WHERE Login = ? AND Password = ?");
+    $stmt->bind_param("ss", $login, $password);
 
-//sql query to find user
-$sql = "SELECT ID, password FROM users WHERE username='" . $username . "'";
-$result = $conn->query($sql);
-
-//check if users match
-    if ($result->num_rows > 0)
-    {
-        //fetch first row
-        $row = $result->fetch_assoc();
-        
-        //compare password from the request with db value
-        if ($password === $row["password"])
-        {
-            //successful login
-            returnWithInfo($row["ID"], $username);
+    if($stmt->execute()){
+        $result = $stmt->get_result();
+        if($result->num_rows > 0){
+            // User found, return user details
+            $row = $result->fetch_assoc();
+            $userID = $row["ID"];
+            $firstName = $row["FirstName"];
+            $lastName = $row["LastName"];
+            $retValue = json_encode(["userID" => $userID, "firstName" => $firstName, "lastName" => $lastName, "message" => "Login Successful"]);
+            sendResultAsJson($retValue);
         }
-        else
-        {
-            //password did not match
-            returnWithError("Invalid password.");
+        else{
+
+            returnWithError("Invalid Login or Password");
         }
     }
-    else
-    {
-        //no matching username in db
-        returnWithError("User not found.");
+    else{
+
+        returnWithError("Error: Something Went Wrong" . $stmt->error);
     }
 
-		$conn->close();
-?>
+    $stmt->close();
+    $conn->close();
+}
