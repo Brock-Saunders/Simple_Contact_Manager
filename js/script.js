@@ -96,7 +96,8 @@ loginForm.addEventListener('submit', (e) => {
                     alert(response.error);
                 } else {
                     alert('Login successful!');
-                    // Redirect to another page or perform other actions
+                    // Redirect to contact page
+                    window.location.href = 'contact.html'
                 }
             } else {
                 alert('Error logging in. Please try again.');
