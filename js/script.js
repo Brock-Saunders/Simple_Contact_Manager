@@ -5,6 +5,9 @@ const extension = 'php';
 const createUserBtn = document.getElementById('createUserBtn');
 const createUserPopup = document.getElementById('createUserPopup');
 const closeBtn = document.querySelector('.close-btn');
+
+//defined functions for forms
+const newContactForm = document.getElementById('newContactForm');
 const createUserForm = document.getElementById('createUserForm');
 
 //PHP ENDPOINTS
@@ -78,9 +81,26 @@ function loginCookie(userID){
     let minutes = 60;
     let date = new Date();
 	date.setTime(date.getTime()+(minutes*60*1000));
+    //set the cookie parameters
     document.cookie = "firstName=" + firstName + ";";
     document.cookie = "lastName=" + lastName + ";";
-    document.cookie = "userId=" + userID + "; expires=" + date.toGMTString() + "; path=/";
+    document.cookie = "userID=" + userID + "; expires=" + date.toGMTString() + "; path=/";
+}
+
+function readCookie(){
+    userID = -1;
+    //take the cookie for the logged in user and split the cookie parameters
+    let data = document.cookie.split(";");
+
+    //search the data for the userID by trimming it and looking for where it starts with userid=
+    for(let i = 0; i < data.length; i++){
+        let cookieID = data[i].trim();
+        if(cookieID.startsWith("userID=")){
+            //userID is now the one found in the split.
+            userID = cookieID.split("=")[1];
+            break;
+        }
+    }
 }
 
 // Handle login form submission
@@ -90,7 +110,7 @@ loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
     let username = document.getElementById('username').value;
-    let password = document.getElementById('password').value;s
+    let password = document.getElementById('password').value;
 
     let xhr = new XMLHttpRequest();
     let url = urlBase + '/Login.' + extension;
@@ -141,6 +161,7 @@ newContactForm.addEventListener('submit', (e) => {
 
 	// making tmp object that has all those parameters
     let reqData = {
+        UserID: userID,
         FirstName: firstName,
         LastName: lastName,
         Email: email,
