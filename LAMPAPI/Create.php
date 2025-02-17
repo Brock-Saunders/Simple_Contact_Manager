@@ -12,7 +12,7 @@
 
     function returnWithError($err){
         $retValue = json_encode(["error" => $err]);
-        sendResultInforAsJson($retValue);
+        sendResultInfoAsJson($retValue);
         exit();
     }
 
