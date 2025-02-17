@@ -137,3 +137,64 @@ body
 {
     margin-top: 20px;
 }
+
+#contactTableSection {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#contactsTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+#contactsTable th,
+#contactsTable td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+#contactsTable th {
+    background-color: #3498db;
+    color: white;
+}
+
+#contactsTable tr:hover {
+    background-color: #f5f5f5;
+}
+
+#contactsTable button {
+    margin: 0 4px;
+    padding: 6px 12px;
+    font-size: 0.9em;
+}
+
+#addContact {
+    margin: 20px 0;
+    text-align: right;
+}
+
+#addContactBtn {
+    margin-bottom: 20px;
+}
+
+#contactTableSection {
+    margin-top: 20px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+}
+
+
+#logoutButton {
+    margin-left: auto;
+}
