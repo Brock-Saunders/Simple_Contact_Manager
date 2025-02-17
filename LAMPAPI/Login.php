@@ -43,7 +43,12 @@ else{
             $userID = $row["ID"];
             $firstName = $row["FirstName"];
             $lastName = $row["LastName"];
-            $retValue = json_encode(["userID" => $userID, "firstName" => $firstName, "lastName" => $lastName, "message" => "Login Successful"]);
+            $retValue = json_encode([
+                "userID" => $userID,
+                "firstName" => $firstName,
+                "lastName" => $lastName,
+                "message" => "Login Successful"
+            ]);
             sendResultAsJson($retValue);
         }
         else{

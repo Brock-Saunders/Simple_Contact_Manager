@@ -9,7 +9,9 @@ const createUserForm = document.getElementById('createUserForm');
 
 //PHP ENDPOINTS
 let createEndPoint = `${urlBase}/Create.${extension}`;
+let contactEndPoint = `${urlBase}/AddContact.${extension}`;
 
+//global vars
 let userID = 0;
 let firstName = "";
 let lastName = "";
@@ -70,7 +72,16 @@ createUserForm.addEventListener('submit', (e) => {
     }
     xhr.send(jsonPayload);
   
-  });
+});
+
+function loginCookie(userID){
+    let minutes = 60;
+    let date = new Date();
+	date.setTime(date.getTime()+(minutes*60*1000));
+    document.cookie = "firstName=" + firstName + ";";
+    document.cookie = "lastName=" + lastName + ";";
+    document.cookie = "userId=" + userID + "; expires=" + date.toGMTString() + "; path=/";
+}
 
 // Handle login form submission
 const loginForm = document.getElementById('loginForm');
@@ -79,7 +90,7 @@ loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
     let username = document.getElementById('username').value;
-    let password = document.getElementById('password').value;
+    let password = document.getElementById('password').value;s
 
     let xhr = new XMLHttpRequest();
     let url = urlBase + '/Login.' + extension;
@@ -95,6 +106,10 @@ loginForm.addEventListener('submit', (e) => {
                 if (response.error) {
                     alert(response.error);
                 } else {
+                    userID = response.userID;
+                    firstName = response.firstName;
+                    lastName = response.lastName;
+                    loginCookie(userID);
                     alert('Login successful!');
                     // Redirect to contact page
                     window.location.href = 'contact.html'
@@ -115,26 +130,29 @@ loginForm.addEventListener('submit', (e) => {
     xhr.send(jsonPayload);
 });
 
-function addContact() {
+newContactForm.addEventListener('submit', (e) => {
+    e.preventDefault();
 	// getting the input values 
-    let contactFirstName = document.getElementById("contactFirstName").value;
-	let contactLastName = document.getElementById("contactLastName").value;
-    let contactPhone = document.getElementById("contactNum").value;
-    let contactEmail = document.getElementById("contactEmail").value;
+    firstName = document.getElementById('firstName').value;
+    lastName = document.getElementById('lastName').value;
+    let email = document.getElementById('email').value;
+    let phone = document.getElementById('phone').value;
     document.getElementById('addContactResult').innerHTML=""; //clears contents so it resets for next UI action
 
 	// making tmp object that has all those parameters
-    let tmp = {firstname: contactFirstName, lastname: contactLastName,phone: contactPhone, email: contactEmail, userId: "testUser124"};
+    let reqData = {
+        FirstName: firstName,
+        LastName: lastName,
+        Email: email,
+        Phone: phone,
+      };
 
 	// changing it to JSON string
-    let jsonPayload = JSON.stringify( tmp );
-    
-	// setting up the endpoint
-    let url = urlBase + '/AddContact.' + extension;
+    let jsonPayload = JSON.stringify( reqData );
 
 	// makes new request objet
     let xhr = new XMLHttpRequest();
-	xhr.open("POST", url, true);
+	xhr.open("POST", contactEndPoint, true);
 	// shows that JSON data is being sent through the request header
 	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 	try
@@ -153,4 +171,4 @@ function addContact() {
 	{
 		document.getElementById("addContactResult").innerHTML = err.message;
 	}
-}
+})
