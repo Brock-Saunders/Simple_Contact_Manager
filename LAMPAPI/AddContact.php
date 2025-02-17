@@ -1,6 +1,5 @@
 <?php
 
-    // Test this on my pc. I used Bruno to test it and it is working as of now. Will tweak to our server when integrated.
     function getRequestData(){
         return json_decode(file_get_contents('php://input'), true);
     }
@@ -20,6 +19,7 @@
     $inData = getRequestData();
 
     //parameters to post into db
+    $userID = $inData["UserID"];
     $firstName = $inData["FirstName"];
     $lastName = $inData["LastName"];
     $email = $inData["Email"];
@@ -33,14 +33,13 @@
     }
     else{
         //prepare is used to, the way i see it, in the databases query language. In this case, we are inserting into the database
-        $stmt = $conn->prepare("INSERT INTO Contacts (FirstName, LastName, Email, Phone) VALUES (?, ?, ?, ?,)");
-        //bind attaches our values to the query. The lowercase S's just say all these values are strings. 
-        $stmt->bind_param("ssss", $firstName, $lastName, $email, $phone);
+        $stmt = $conn->prepare("INSERT INTO Contacts (UserID, FirstName, LastName, Email, Phone) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("issss", $userID, $firstName, $lastName, $email, $phone);
 
         if($stmt->execute()){
-            //inserts the id into the db with the user
-            $userID = $stmt->insert_id;
-            echo json_encode(["userID" => $userID, "message" => "SUCCESS!!"]);
+            //inserts the id into the db contact table
+            $contactID = $stmt->insert_id;
+            echo json_encode(["contactID" => $contactID, "message" => "SUCCESS!!"]);
         }
         else{
             //DEBUGGING!!!!
@@ -49,7 +48,7 @@
                 returnWithError("Duplicate Entry.. Which one?? IDK!");
             }
             else{
-                returnWithError("Error:L Something Went Wrong" . $stmt->error);
+                returnWithError("Error: Something Went Wrong" . $stmt->error);
             }
         }
 
