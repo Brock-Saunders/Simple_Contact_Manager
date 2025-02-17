@@ -35,7 +35,7 @@ window.addEventListener('click', (e) => {
         createUserPopup.style.display = 'none';
     }
 });
-
+ 
 // Handle form submission
 createUserForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -158,6 +158,22 @@ newContactForm.addEventListener('submit', (e) => {
     let email = document.getElementById('email').value;
     let phone = document.getElementById('phone').value;
     document.getElementById('addContactResult').innerHTML=""; //clears contents so it resets for next UI action
+
+    // Add new row to table
+    const tableBody = document.getElementById('contactsTableBody');
+    let newRow = tableBody.insertRow(0); // Insert at the top
+    newRow.innerHTML = `
+        <td>${firstName}</td>
+        <td>${lastName}</td>
+        <td>${phone}</td>
+        <td>${email}</td>
+        <td>
+            <button class="primary-button">Edit</button>
+            <button class="primary-button">Delete</button>
+        </td>
+    `;
+
+
 
 	// making tmp object that has all those parameters
     let reqData = {
