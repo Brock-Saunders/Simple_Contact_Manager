@@ -36,7 +36,7 @@ window.addEventListener('click', (e) => {
     }
 });
  
-// Handle form submission
+// Handle create form submission
 createUserForm.addEventListener('submit', (e) => {
     e.preventDefault();
   
@@ -55,7 +55,6 @@ createUserForm.addEventListener('submit', (e) => {
       Phone: phone,
       Password: password
     };
-    
   
     console.log("Sending Request Data:", reqData);
   
