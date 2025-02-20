@@ -196,5 +196,7 @@ body
 
 
 #logoutButton {
-    margin-left: auto;
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }

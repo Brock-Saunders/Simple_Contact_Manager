@@ -36,7 +36,7 @@ window.addEventListener('click', (e) => {
     }
 });
  
-// Handle form submission
+// Handle create form submission
 createUserForm.addEventListener('submit', (e) => {
     e.preventDefault();
   
@@ -55,7 +55,6 @@ createUserForm.addEventListener('submit', (e) => {
       Phone: phone,
       Password: password
     };
-    
   
     console.log("Sending Request Data:", reqData);
   
@@ -149,63 +148,3 @@ loginForm.addEventListener('submit', (e) => {
 
     xhr.send(jsonPayload);
 });
-
-newContactForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-	// getting the input values 
-    firstName = document.getElementById('firstName').value;
-    lastName = document.getElementById('lastName').value;
-    let email = document.getElementById('email').value;
-    let phone = document.getElementById('phone').value;
-    document.getElementById('addContactResult').innerHTML=""; //clears contents so it resets for next UI action
-
-    // Add new row to table
-    const tableBody = document.getElementById('contactsTableBody');
-    let newRow = tableBody.insertRow(0); // Insert at the top
-    newRow.innerHTML = `
-        <td>${firstName}</td>
-        <td>${lastName}</td>
-        <td>${phone}</td>
-        <td>${email}</td>
-        <td>
-            <button class="primary-button">Edit</button>
-            <button class="primary-button">Delete</button>
-        </td>
-    `;
-
-
-
-	// making tmp object that has all those parameters
-    let reqData = {
-        UserID: userID,
-        FirstName: firstName,
-        LastName: lastName,
-        Email: email,
-        Phone: phone,
-      };
-
-	// changing it to JSON string
-    let jsonPayload = JSON.stringify( reqData );
-
-	// makes new request objet
-    let xhr = new XMLHttpRequest();
-	xhr.open("POST", contactEndPoint, true);
-	// shows that JSON data is being sent through the request header
-	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-	try
-	{
-		xhr.onreadystatechange = function() 
-		{// 4 bc that means request is fully completed and 200 bc request was succesful
-			if (this.readyState == 4 && this.status == 200) 
-			{
-				document.getElementById("addContactResult").innerHTML = "Contact has been added";
-				
-			}
-		};
-		xhr.send(jsonPayload);
-	}
-	catch(err)// if error happens then message displayed
-	{
-		document.getElementById("addContactResult").innerHTML = err.message;
-	}
-})
