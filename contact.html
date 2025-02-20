@@ -5,45 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- formatting for phone screens -->
     <title>Contact Manager</title>
     <link rel="stylesheet" href="css/styles.css"> <!-- linking css-->
+    <!--<script src="js/contactScript.js"></script>-->
+    <script>
+        //call readCookie on log in to get the userID so all user functions
+        document.addEventListener("DOMContentLoaded", function(){
+            readCookie();
+            console.log("User ID: ", userID);
+        });
+    </script>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1 id="title">Your Contacts</h1>
-            <button id="logoutButton" class="primary-button">Logout</button> 
-        </div>
-    </header>
+    
 
     <div class="container">
-
-        <!-- Add Contact Popup Form -->
-        <div id="addContactPopup" class="popup">
-            <div class="popup-content">
-                <span class="close-btn">&times;</span>
-                <h2>Add New Contact</h2>
-                <form id="newContactForm">
-                    <div class="form-group">
-                        <input type="text" id="firstName" placeholder="First Name" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="lastName" placeholder="Last Name" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="tel" id="phone" placeholder="Phone Number" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" id="email" placeholder="Email" required>
-                    </div>
-                </form>
-                <div id="addContactResult"></div>
+        <header>
+            <div class="header-content">
+                <h1>Contact Homepage</h1>
+                <button id="logoutButton" class="primary-button" onclick ="logout()">Logout</button>
             </div>
-        </div>
-
-        <!-- Contacts Table Section with header and button inline -->
+        </header>
+        <!-- Table Section -->
         <section id="contactTableSection">
             <div class="table-header">
                 <h2>Your Contacts</h2>
-                <button class="primary-button" id="addContactBtn">Add Contact</button>
             </div>
             <table id="contactsTable">
                 <thead>
@@ -56,35 +40,13 @@
                     </tr>
                 </thead>
                 <tbody id="contactsTableBody">
-                    <!-- Dummy data rows -->
-                    <tr>
-                        <td>Om</td>
-                        <td>Surve</td>
-                        <td>561-810-9452</td>
-                        <td>omsurve04@gmail.com</td>
+                    <tr id="newContactRow">
+                        <td><input type="text" id="newFirstName" placeholder="First Name"></td>
+                        <td><input type="text" id="newLastName" placeholder="Last Name"></td>
+                        <td><input type="tel" id="newPhone" placeholder="Phone Number"></td>
+                        <td><input type="email" id="newEmail" placeholder="Email"></td>
                         <td>
-                            <button class="primary-button">Edit</button>
-                            <button class="primary-button">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Todd</td>
-                        <td>Smith</td>
-                        <td>987-123-3210</td>
-                        <td>toddsmith@gmail.com</td>
-                        <td>
-                            <button class="primary-button">Edit</button>
-                            <button class="primary-button">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Lebron</td>
-                        <td>James</td>
-                        <td>232-232-2323</td>
-                        <td>lebronjames@gmail.com</td>
-                        <td>
-                            <button class="primary-button">Edit</button>
-                            <button class="primary-button">Delete</button>
+                            <button class="primary-button" id="addContactBtn" onclick="addContact()">Add Contact</button>
                         </td>
                     </tr>
                 </tbody>
@@ -95,12 +57,12 @@
         <section id="searchContact">
             <h2>Search for a Contact</h2>
             <div class="form-group">
-                <input type="text" id="searchInput" placeholder="Enter name or email">
+                <input type="text" id="searchInput" placeholder="Enter name or email" auttocomplete="off">
                 <button id="searchButton" class="primary-button" onclick="searchContact()">Search</button>
             </div>
             <div id="searchResult"></div>
         </section>
     </div>
+    <script src="js/contactScript.js"></script>
 </body>
-<script src="js/contactScript.js"></script>
 </html>
