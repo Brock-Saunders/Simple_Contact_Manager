@@ -208,3 +208,16 @@ newContactForm.addEventListener('submit', (e) => {
 		document.getElementById("addContactResult").innerHTML = err.message;
 	}
 })
+
+//Handle logout button functinality 
+const logoutButton = document.getElementById('logoutButton');
+
+logoutButton.addEventListener('click', () =>{
+    //clear cookies
+    document.cookie = "firstName=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "lastName=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "userID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    //redirct to login page
+    window.href = 'index.html'
+})
