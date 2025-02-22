@@ -39,7 +39,7 @@
         if($stmt->execute()){
             //inserts the id into the db contact table
             $contactID = $stmt->insert_id;
-            echo json_encode(["contactID" => $contactID, "message" => "SUCCESS!!"]);
+            echo json_encode(["contactID" => $contactID, "message" => "Contact Added."]);
         }
         else{
             //DEBUGGING!!!!
@@ -48,7 +48,7 @@
                 returnWithError("Duplicate Entry.. Which one?? IDK!");
             }
             else{
-                returnWithError("Error: Something Went Wrong" . $stmt->error);
+                returnWithError("Error: Something went Wrong" . $stmt->error);
             }
         }
 
