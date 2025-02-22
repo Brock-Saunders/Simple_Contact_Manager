@@ -12,7 +12,10 @@ const createUserForm = document.getElementById('createUserForm');
 
 //PHP ENDPOINTS
 let createEndPoint = `${urlBase}/Create.${extension}`;
-let contactEndPoint = `${urlBase}/AddContact.${extension}`;
+let addContactEndPoint = `${urlBase}/AddContact.${extension}`;
+let searchContactEndpoint = `${urlBase}/SearchContact.${extension}`;
+let deleteContactEndpoint = `${urlBase}/DeleteContact.${extension}`;
+let saveContactEndpoint = `${urlBase}/EditContact.${extension}`
 
 //global vars
 let userID = 0;
@@ -160,7 +163,7 @@ function addContact() {
     // makes new request object
     let xhr = new XMLHttpRequest();
     // Set the endpoint for the request
-    xhr.open("POST", contactEndPoint, true);
+    xhr.open("POST", addContactEndPoint, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
     try {
@@ -234,7 +237,7 @@ function deleteContact(button) {
 
     // Create a request object
     let xhr = new XMLHttpRequest();
-    xhr.open("DELETE", `${contactEndPoint}/${contactId}`, true); // Adjust the endpoint as needed
+    xhr.open("DELETE", deleteContactEndpoint, true); // Adjust the endpoint as needed
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
     try {
@@ -300,7 +303,7 @@ function saveContact(button) {
     // Create a new XMLHttpRequest object
     const xhr = new XMLHttpRequest();
     // Set the endpoint for the request
-    xhr.open("PUT", `${urlBase}/api/contacts/${contactId}`, true);
+    xhr.open("PUT", saveContactEndpoint, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
     // Handle the response
@@ -363,7 +366,7 @@ function searchContact() {
     // Create a new XMLHttpRequest object
     const xhr = new XMLHttpRequest();
     // Set the endpoint for the request
-    xhr.open("GET", `${urlBase}/api/contacts?search=${encodeURIComponent(query)}`, true);
+    xhr.open("GET", searchContactEndpoint, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
     // Handle the response
