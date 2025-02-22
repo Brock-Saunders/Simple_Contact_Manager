@@ -23,7 +23,7 @@ $inData = getRequestData();
 $conn = new mysqli("localhost", "webuser", "PersonaGaru18", "contact");
 
 if($conn->connect_error){
-    returnWithError("Couldn't Connect to DB: " . $conn->connect_error);
+    returnWithError("Couldn't connect to DB: " . $conn->connect_error);
 }
 
 else{

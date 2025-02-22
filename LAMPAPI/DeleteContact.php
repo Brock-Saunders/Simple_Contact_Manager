@@ -42,10 +42,10 @@
             //DEBUGGING!!!!
             if($conn->errno == 1062){
                 // error 1062 in mysql is a duplicate error, spent hours figuring this out -_-
-                returnWithError("Duplicate Entry.. Which one?? IDK!");
+                returnWithError("Duplicate Entry... Which one?? IDK!");
             }
             else{
-                returnWithError("Error: Something Went Wrong" . $stmt->error);
+                returnWithError("Error: Something went Wrong." . $stmt->error);
             }
         }
 
