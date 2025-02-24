@@ -25,7 +25,7 @@ $inData = getRequestData();
 $login = $inData["Login"];
 $password = $inData["Password"];
 
-$conn = new mysqli("localhost", "webuser", "PersonaGaru18", "contact");
+$conn = new mysqli("localhost", "webuser", "testpassword", "contact");
 
 if($conn->connect_error){
     returnWithError("Couldn't Connect to DB: " . $conn->connect_error);
