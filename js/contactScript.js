@@ -16,6 +16,7 @@ let addContactEndPoint = `${urlBase}/AddContact.${extension}`;
 let searchContactEndpoint = `${urlBase}/SearchContact.${extension}`;
 let deleteContactEndpoint = `${urlBase}/DeleteContact.${extension}`;
 let saveContactEndpoint = `${urlBase}/EditContact.${extension}`
+let fetchContactsEnpoint = `${urlBase}/FetchContact.${extension}`
 
 //global vars
 let userID = 0;
@@ -39,10 +40,64 @@ function readCookie(){
     }
 }
 
+function fetchContacts() {
+
+    let reqData = {
+        UserID: userID
+    };
+
+    let jsonPayload = JSON.stringify(reqData);
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", fetchContactsEnpoint, true);
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+    xhr.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            let jsonObject = JSON.parse(xhr.responseText);
+            if (jsonObject.Contacts) {
+                let tableBody = document.getElementById('contactsTableBody');
+                tableBody.innerHTML = '';
+
+                if (jsonObject.Contacts.length > 0) {
+                    jsonObject.Contacts.forEach(contact => {
+                        let row = document.createElement('tr');
+                        row.innerHTML = `
+                        <td>${contact.FirstName}</td>
+                        <td>${contact.LastName}</td>
+                        <td>${contact.Phone}</td>
+                        <td>${contact.Email}</td>
+                        <td>
+                        <button class="primary-button update-btn" onclick="updateContact(this)">Update</button>
+                        <button class="primary-button delete-btn" onclick="deleteContact(this)">Delete</button>
+                        </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                } 
+                else{
+                    let row = document.createElement('tr');
+                    row.innerHTML = '<td colspan="5">No Friends?</td>';
+                    tableBody.appendChild(row);
+                }
+            } 
+            else {
+                console.error("no contacts");
+            }
+        }
+    }
+    xhr.send(jsonPayload);
+};
+    
+
+
+
 // Read cookie to get userID
-document.addEventListener("DOMContentLoaded", function(){
-    readCookie();
+document.addEventListener("DOMContentLoaded", function () {
+    readCookie(); // Read the userID from the cookie
     console.log("User ID: ", userID);
+
+    if (userID > 0) {
+        fetchContacts(); 
+    }
 });
 
 
@@ -226,7 +281,7 @@ function saveContact(button) {
     const contactId = row.getAttribute('data-contact-id');
 
     // Create the contact object
-    const contactData = { FirstName: firstName, LastName: lastName, Phone: phone, Email: email };
+    const contactData = { userID, FirstName: firstName, LastName: lastName, Phone: phone, Email: email };
 
     // Create a new XMLHttpRequest object
     const xhr = new XMLHttpRequest();
