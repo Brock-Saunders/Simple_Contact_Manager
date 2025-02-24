@@ -1,13 +1,24 @@
-body 
-{
+html, body {
+    height: 100%; 
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: black !important; 
+    color: white; 
     margin: 0;
-    padding: 0;
-    background-color: #f5f5f5;
-    font-family: 'Arial', sans-serif;
+    padding: 20px;
+    position: relative; 
+    background: url('images/gasping-pikachu3.png') no-repeat left bottom;
+    background-size: auto;
     min-height: 100vh;
+    padding-bottom: 120px;
 }
 
 .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
@@ -17,7 +28,7 @@ body
 #title
 { 
     font-size: 40px;
-    color: #2c3e50;
+    color: white;
     width: 100%;
     padding: 2% 0;
     text-align: center;
@@ -156,12 +167,14 @@ body
 #contactsTable td {
     padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+    background-color: rgba(255, 165, 0, 0.5); 
+    color: black;
 }
 
 #contactsTable th {
-    background-color: #3498db;
-    color: white;
+    background-color: rgba(255, 165, 0, 0.7);
+    color: white; 
 }
 
 #contactsTable tr:hover {
@@ -197,6 +210,163 @@ body
 
 #logoutButton {
     position: absolute;
-    top: 20px;
+    top: 2px;
+    right: -80px;
+}
+
+.pikachu-background {
+    position: absolute; 
+    bottom: 10px; 
+    right: 10px;
+    width: 300px; 
+    height: 300px; 
+    z-index: 0; 
+}
+
+table {
+    width: 100%; 
+    border-collapse: collapse;
+    background-color: rgba(255, 165, 0, 0.3); 
+}
+
+th, td {
+    padding: 12px; 
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 165, 0, 0.5);
+    color: black;
+}
+
+th {
+    background-color: rgba(255, 165, 0, 0.7);
+    color: white; 
+}
+
+#contactsTableBody {
+    background-color: transparent; 
+}
+
+#contactsTableBody tr {
+    background-color: transparent; 
+}
+
+#contactsTableBody td {
+    background-color: transparent; 
+}
+
+tr:hover {
+    background-color: rgba(255, 165, 0, 0.6); 
+}
+
+h2 {
+    font-size: 24px; 
+    color: black; 
+    margin: 10px 0; 
+}
+
+.logo {
+    position: absolute;
+    top: 10px;
+    left: -75px;
+    width: 10%; 
+    max-width: 100px;
+    height: auto;
+    z-index: 1;
+}
+
+@media (max-width: 600px) {
+    .logo {
+        width: 20%; 
+    }
+}
+
+@media (max-width: 400px) {
+    .logo {
+        width: 30%; 
+    }
+}
+
+#searchContainer {
+    margin-bottom: 20px; 
+}
+
+#searchInput {
+    padding: 10px; 
+    margin-right: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+}
+
+#searchButton, #resetButton {
+    padding: 10px 15px; 
+    margin-right: 5px; 
+}
+
+header {
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    padding: 10px; 
+}
+
+.header-buttons {
+    display: flex; 
+    gap: 10px; 
+}
+
+#logoutButton {
+    padding: 10px 15px; 
+}
+
+/* Responsive table */
+table {
+    width: 100%; 
+    border-collapse: collapse;
+    background-color: rgba(255, 165, 0, 0.3); 
+    overflow-x: auto; 
+}
+
+th, td {
+    padding: 12px;
+    text-align: left; 
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+    color: black; 
+}
+
+
+@media (max-width: 768px) {
+    .logo {
+        width: 50px; 
+    }
+
+    h1 {
+        font-size: 20px; 
+    }
+
+    #logoutButton {
+        padding: 8px 12px; 
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 18px; 
+    }
+
+    #logoutButton {
+        padding: 6px 10px; 
+    }
+}
+
+.bottom-right-image {
+    position: absolute;
+    bottom: 150px;
     right: 20px;
+    width: 150px;
+    height: auto;
+    z-index: 10;
+}
+
+h1 {
+    color: white;
 }

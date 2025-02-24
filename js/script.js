@@ -12,7 +12,6 @@ const createUserForm = document.getElementById('createUserForm');
 
 //PHP ENDPOINTS
 let createEndPoint = `${urlBase}/Create.${extension}`;
-let contactEndPoint = `${urlBase}/AddContact.${extension}`;
 
 //global vars
 let userID = 0;

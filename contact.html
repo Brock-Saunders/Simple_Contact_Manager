@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/> <!-- chars displayed correctly-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- formatting for phone screens -->
-    <title>Contact Manager</title>
+    <meta charset="UTF-8"/> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Pokedex Manager</title>
     <link rel="stylesheet" href="css/styles.css"> <!-- linking css-->
-    <!--<script src="js/contactScript.js"></script>-->
     <script>
-        //call readCookie on log in to get the userID so all user functions
-        document.addEventListener("DOMContentLoaded", function(){
-            readCookie();
-            console.log("User ID: ", userID);
-        });
     </script>
 </head>
 <body>
-    
-
     <div class="container">
         <header>
-            <div class="header-content">
-                <h1>Contact Homepage</h1>
-                <button id="logoutButton" class="primary-button" onclick ="logout()">Logout</button>
+            <img src="css/images/logo.png" alt="Logo" class="logo">
+            <h1>Pokedex Manager</h1>
+            <div class="header-buttons">
+                <button id="logoutButton" class="primary-button" onclick="logout()">Logout</button>
             </div>
         </header>
-        <!-- Table Section -->
+        
+        <!-- search container with both buttons -->
+        <div id="searchContainer">
+            <input type="text" id="searchInput" placeholder="Search contacts...">
+            <button id="searchButton" class="primary-button" onclick="searchContact()">Search</button>
+            <button id="resetButton" class="primary-button" onclick="resetSearch()">Reset</button>
+        </div>
+
+        <!-- Table Sect -->
         <section id="contactTableSection">
             <div class="table-header">
                 <h2>Your Contacts</h2>
@@ -53,16 +54,10 @@
             </table>
         </section>
 
-        <!-- Search Section MOVED BELOW table -->
-        <section id="searchContact">
-            <h2>Search for a Contact</h2>
-            <div class="form-group">
-                <input type="text" id="searchInput" placeholder="Enter name or email" auttocomplete="off">
-                <button id="searchButton" class="primary-button" onclick="searchContact()">Search</button>
-            </div>
-            <div id="searchResult"></div>
-        </section>
+        <div id="errorContainer" style="display: none; color: red; margin-bottom: 10px;"></div>
     </div>
     <script src="js/contactScript.js"></script>
+    
+    <img src="css/images/ash.png" alt="ash" class="bottom-right-image">
 </body>
 </html>
