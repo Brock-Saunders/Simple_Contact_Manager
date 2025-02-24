@@ -203,31 +203,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 function deleteContact(button) {
-    // Get the row of the button that was clocked
     const row = button.parentElement.parentElement;
-    
-    const contactId = row.getAttribute('data-contact-id'); 
+    const contactId = row.getAttribute('data-contact-id');
 
-    // confirm that they are deleting
     const confirmDelete = confirm("Are you sure you want to delete this contact?");
-    if (confirmDelete) {
-        row.parentElement.removeChild(row); // Remove the row 
+    if (!confirmDelete) {
+        return;
     }
 
-    // Create a request object
+    let reqData = {
+        UserID: userID,
+        ContactID: contactId
+    };
+
     let xhr = new XMLHttpRequest();
-    xhr.open("DELETE", deleteContactEndpoint, true); // Adjust the endpoint as needed
+    xhr.open("POST", deleteContactEndpoint, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
     try {
         xhr.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("addContactResult").innerHTML = "Contact has been deleted";
-                // Remove the row from the table
-                row.parentElement.removeChild(row);
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    let response = JSON.parse(xhr.responseText);
+                    if (response.error) {
+                        alert(response.error);
+                    } else {
+                        // Only remove the row after successful deletion
+                        row.parentElement.removeChild(row);
+                        document.getElementById("addContactResult").innerHTML = "Contact has been deleted";
+                    }
+                } else {
+                    alert("Error deleting contact");
+                }
             }
         };
-        xhr.send();
+        xhr.send(JSON.stringify(reqData));
     } catch (err) {
         document.getElementById("addContactResult").innerHTML = err.message;
     }
@@ -303,7 +313,7 @@ function editContact(button) {
     xhr.onreadystatechange = function() {
         if (this.readyState == 4) {
             if (this.status == 200) {
-                fetchContacts();
+                    fetchContacts();
             } else {
                 alert("Error updating contact.");
                 console.error("Error:", this.statusText);
