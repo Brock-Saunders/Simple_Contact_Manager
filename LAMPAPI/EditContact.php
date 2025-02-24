@@ -19,6 +19,7 @@ function returnWithError($err){
 $inData = getRequestData();
 
 //Fetching parameters from the request
+// use contactId instead of userID
 $contactID = $inData["ContactID"];
 $firstName = $inData["FirstName"];
 $lastName = $inData["LastName"];
