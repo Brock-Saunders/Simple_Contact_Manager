@@ -15,7 +15,8 @@ let createEndPoint = `${urlBase}/Create.${extension}`;
 let addContactEndPoint = `${urlBase}/AddContact.${extension}`;
 let searchContactEndpoint = `${urlBase}/SearchContact.${extension}`;
 let deleteContactEndpoint = `${urlBase}/DeleteContact.${extension}`;
-let saveContactEndpoint = `${urlBase}/EditContact.${extension}`
+let editContactEndpoint = `${urlBase}/EditContact.${extension}`
+let fetchContactsEnpoint = `${urlBase}/FetchContact.${extension}`
 
 //global vars
 let userID = 0;
@@ -39,10 +40,65 @@ function readCookie(){
     }
 }
 
+function fetchContacts() {
+
+    let reqData = {
+        UserID: userID
+    };
+
+    let jsonPayload = JSON.stringify(reqData);
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", fetchContactsEnpoint, true);
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+    xhr.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            let jsonObject = JSON.parse(xhr.responseText);
+            if (jsonObject.Contacts) {
+                let tableBody = document.getElementById('contactsTableBody');
+                tableBody.innerHTML = '';
+
+                if (jsonObject.Contacts.length > 0) {
+                    jsonObject.Contacts.forEach(contact => {
+                        let row = document.createElement('tr');
+                        row.setAttribute('data-contact-id', contact.ContactID);
+                        row.innerHTML = `
+                        <td>${contact.FirstName}</td>
+                        <td>${contact.LastName}</td>
+                        <td>${contact.Phone}</td>
+                        <td>${contact.Email}</td>
+                        <td>
+                        <button class="primary-button update-btn" onclick="updateContact(this)">Update</button>
+                        <button class="primary-button delete-btn" onclick="deleteContact(this)">Delete</button>
+                        </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                } 
+                else{
+                    let row = document.createElement('tr');
+                    row.innerHTML = '<td colspan="5">No Friends?</td>';
+                    tableBody.appendChild(row);
+                }
+            } 
+            else {
+                console.error("no contacts");
+            }
+        }
+    }
+    xhr.send(jsonPayload);
+};
+    
+
+
+
 // Read cookie to get userID
-document.addEventListener("DOMContentLoaded", function(){
-    readCookie();
+document.addEventListener("DOMContentLoaded", function () {
+    readCookie(); // Read the userID from the cookie
     console.log("User ID: ", userID);
+
+    if (userID > 0) {
+        fetchContacts(); 
+    }
 });
 
 
@@ -142,36 +198,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
-
-
-
 function deleteContact(button) {
-    // Get the row of the button that was clocked
     const row = button.parentElement.parentElement;
-    
-    const contactId = row.getAttribute('data-contact-id'); 
+    const contactId = row.getAttribute('data-contact-id');
 
-    // confirm that they are deleting
     const confirmDelete = confirm("Are you sure you want to delete this contact?");
-    if (confirmDelete) {
-        row.parentElement.removeChild(row); // Remove the row 
+    if (!confirmDelete) {
+        return;
     }
 
-    // Create a request object
+    let reqData = {
+        UserID: userID,
+        ContactID: contactId
+    };
+
     let xhr = new XMLHttpRequest();
-    xhr.open("DELETE", deleteContactEndpoint, true); // Adjust the endpoint as needed
+    xhr.open("POST", deleteContactEndpoint, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
     try {
         xhr.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("addContactResult").innerHTML = "Contact has been deleted";
-                // Remove the row from the table
-                row.parentElement.removeChild(row);
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    let response = JSON.parse(xhr.responseText);
+                    if (response.error) {
+                        alert(response.error);
+                    } else {
+                        // Only remove the row after successful deletion
+                        row.parentElement.removeChild(row);
+                        document.getElementById("addContactResult").innerHTML = "Contact has been deleted";
+                    }
+                } else {
+                    alert("Error deleting contact");
+                }
             }
         };
-        xhr.send();
+        xhr.send(JSON.stringify(reqData));
     } catch (err) {
         document.getElementById("addContactResult").innerHTML = err.message;
     }
@@ -203,13 +265,15 @@ function updateContact(button) {
         <td><input type="tel" value="${phone}" id="editPhone"></td>
         <td><input type="email" value="${email}" id="editEmail"></td>
         <td>
-            <button class="primary-button" onclick="saveContact(this)">Save</button>
+            <button class="primary-button" onclick="editContact(this)">Save</button>
             <button class="primary-button" onclick="cancelEdit(this)">Cancel</button>
         </td>
     `;
+    let contactId = row.getAttribute('data-contact-id');
+    document.getElementById('editContactID').value = contactId;
 }
 
-function saveContact(button) {
+function editContact(button) {
     const row = button.parentElement.parentElement; // Get the row of the clicked button
     const firstName = document.getElementById('editFirstName').value;
     const lastName = document.getElementById('editLastName').value;
@@ -226,30 +290,26 @@ function saveContact(button) {
     const contactId = row.getAttribute('data-contact-id');
 
     // Create the contact object
-    const contactData = { FirstName: firstName, LastName: lastName, Phone: phone, Email: email };
+    const reqData = {
+        ContactID: contactId,
+        FirstName: firstName,
+        LastName: lastName,
+        Phone: phone,
+        Email: email
+    };
 
     // Create a new XMLHttpRequest object
     const xhr = new XMLHttpRequest();
+    let jsonPayload = JSON.stringify(reqData);
     // Set the endpoint for the request
-    xhr.open("PUT", saveContactEndpoint, true);
+    xhr.open("PUT", editContactEndpoint, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
     // Handle the response
     xhr.onreadystatechange = function() {
         if (this.readyState == 4) {
             if (this.status == 200) {
-                const data = JSON.parse(xhr.responseText);
-                // Update the row with the new values
-                row.innerHTML = `
-                    <td>${data.FirstName}</td>
-                    <td>${data.LastName}</td>
-                    <td>${data.Phone}</td>
-                    <td>${data.Email}</td>
-                    <td>
-                        <button class="primary-button update-btn" onclick="updateContact(this)">Update</button>
-                        <button class="primary-button delete-btn" onclick="deleteContact(this)">Delete</button>
-                    </td>
-                `;
+                    fetchContacts();
             } else {
                 alert("Error updating contact.");
                 console.error("Error:", this.statusText);
@@ -258,7 +318,6 @@ function saveContact(button) {
     };
 
     // Convert the contact data to JSON string and send the request
-    const jsonPayload = JSON.stringify(contactData);
     xhr.send(jsonPayload);
 }
 

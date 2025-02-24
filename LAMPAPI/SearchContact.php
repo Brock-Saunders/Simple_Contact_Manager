@@ -20,7 +20,7 @@ function returnWithError($err){
 
 $inData = getRequestData();
 
-$conn = new mysqli("localhost", "webuser", "PersonaGaru18", "contact");
+$conn = new mysqli("localhost", "webuser", "testpassword", "contact");
 
 if($conn->connect_error){
     returnWithError("Couldn't connect to DB: " . $conn->connect_error);

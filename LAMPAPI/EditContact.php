@@ -19,7 +19,8 @@ function returnWithError($err){
 $inData = getRequestData();
 
 //Fetching parameters from the request
-$userID = $inData["UserID"];
+// use contactId instead of userID
+$contactID = $inData["ContactID"];
 $firstName = $inData["FirstName"];
 $lastName = $inData["LastName"];
 $email = $inData["Email"];
@@ -33,8 +34,8 @@ if($conn->connect_error){
 }
 
 else {
-    $stmt = $conn->prepare("UPDATE Contacts SET FirstName = ?, LastName = ?, Email = ?, Phone = ? WHERE UserID = ?");
-    $stmt->bind_param("ssssi", $firstName, $lastName, $email, $phone, $userID);
+    $stmt = $conn->prepare("UPDATE Contacts SET FirstName = ?, LastName = ?, Email = ?, Phone = ? WHERE ContactID = ?");
+    $stmt->bind_param("ssssi", $firstName, $lastName, $email, $phone, $contactID);
 
     if($stmt->execute() === TRUE) {
         echo json_encode(["message" => "Contact updated."]);
