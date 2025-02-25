@@ -153,6 +153,7 @@ function addContact() {
             }
         };
         xhr.send(jsonPayload); // Send the request with the JSON
+        fetchContacts();//fetch contacts after json sent
     } catch (err) {
         // Handle any errors 
         document.getElementById("addContactResult").innerHTML = err.message;
@@ -212,7 +213,10 @@ function deleteContact(button) {
         ContactID: contactId
     };
 
-    let xhr = new XMLHttpRequest();
+    console.log(row.getAttribute('data-contact-id'));
+    console.log(reqData);
+
+    let xhr = new XMLHttpRequest(); 
     xhr.open("POST", deleteContactEndpoint, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
