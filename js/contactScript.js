@@ -378,6 +378,9 @@ function updateContactsTable(contacts) {
     // Clear only the contact rows, not the entire table
     tableBody.innerHTML = '';
 
+    // Re-add the "Add Contact" row at the end
+    tableBody.appendChild(addContactRow);
+
     if (contacts.length > 0) {
         contacts.forEach(contact => {
             const row = document.createElement('tr');
@@ -399,9 +402,6 @@ function updateContactsTable(contacts) {
         row.innerHTML = '<td colspan="5">No contacts found</td>';
         tableBody.appendChild(row);
     }
-
-    // Re-add the "Add Contact" row at the end
-    tableBody.appendChild(addContactRow);
 }
 
 
