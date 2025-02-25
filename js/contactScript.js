@@ -146,6 +146,7 @@ function addContact() {
                 } else {
                     fetchContacts();
                 }
+                fetchContacts();
             }
         };
         xhr.send(jsonPayload);
