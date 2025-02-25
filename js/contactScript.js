@@ -144,9 +144,8 @@ function addContact() {
                 if (searchQuery) {
                     searchContact();
                 } else {
-                    fetchContacts();
+                    setTimeout(fetchContacts, 500); // Delay fetching by 500ms
                 }
-                fetchContacts();
             }
         };
         xhr.send(jsonPayload);
@@ -159,6 +158,7 @@ function addContact() {
     document.getElementById('newLastName').value = '';
     document.getElementById('newPhone').value = '';
     document.getElementById('newEmail').value = '';
+    fetchContacts();
 }
 
 
