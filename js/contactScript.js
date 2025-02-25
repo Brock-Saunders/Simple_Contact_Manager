@@ -55,7 +55,12 @@ function fetchContacts() {
             let jsonObject = JSON.parse(xhr.responseText);
             if (jsonObject.Contacts) {
                 let tableBody = document.getElementById('contactsTableBody');
+                // Save the add contact row before clearing the table
+                let addContactRow = document.getElementById('newContactRow');
                 tableBody.innerHTML = '';
+                
+                // Add back the "Add Contact" row first
+                tableBody.appendChild(addContactRow);
 
                 if (jsonObject.Contacts.length > 0) {
                     jsonObject.Contacts.forEach(contact => {
@@ -74,11 +79,6 @@ function fetchContacts() {
                         tableBody.appendChild(row);
                     });
                 } 
-                else{
-                    let row = document.createElement('tr');
-                    row.innerHTML = '<td colspan="5">No Friends?</td>';
-                    tableBody.appendChild(row);
-                }
             } 
             else {
                 console.error("no contacts");
@@ -145,6 +145,7 @@ function addContact() {
             }
         };
         xhr.send(jsonPayload); // Send the request with the JSON
+        fetchContacts();//fetch contacts after json sent
     } catch (err) {
         // Handle any errors 
         document.getElementById("addContactResult").innerHTML = err.message;
@@ -202,7 +203,10 @@ function deleteContact(button) {
         ContactID: contactId
     };
 
-    let xhr = new XMLHttpRequest();
+    console.log(row.getAttribute('data-contact-id'));
+    console.log(reqData);
+
+    let xhr = new XMLHttpRequest(); 
     xhr.open("POST", deleteContactEndpoint, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
