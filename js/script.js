@@ -1,4 +1,5 @@
-const urlBase = 'http://localhost/LAMPAPI'
+//const urlBase = 'http://localhost/LAMPAPI'
+const urlBase = 'http://practestah.ahclass.xyz/LAMPAPI'
 const extension = 'php';
 
 // Popup functionality
