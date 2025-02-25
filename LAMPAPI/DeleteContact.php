@@ -14,12 +14,10 @@
         sendResultInfoAsJson($retValue);
         exit();
     }
-
     //retrieve data from front end
     $inData = getRequestData();
 
     //parameters to post into db
-    $userID = $inData["UserID"];
     $contactID = $inData["ContactID"];
 
     //start connection to DB using host(server), db user, db password, db name
@@ -31,28 +29,26 @@
     }
     else{
         //prepare is used to, the way i see it, in the databases query language. In this case, we are inserting into the database
-        $stmt = $conn->prepare("DELETE FROM Contacts WHERE UserID = ? and ID = ?");
-        $stmt->bind_param("ii", $userID, $contactID);
+        $stmt = $conn->prepare("DELETE FROM Contacts WHERE ContactID = ?");
+        $stmt->bind_param("i", $contactID);
 
-        if($stmt->execute()){
-            //sucess message if the contact was deleted
-            echo json_encode(["message" => "Contact deleted."]);
-        }
-        else{
-            //DEBUGGING!!!!
-            if($conn->errno == 1062){
-                // error 1062 in mysql is a duplicate error, spent hours figuring this out -_-
-                returnWithError("Duplicate Entry... Which one?? IDK!");
+        // Execute the query
+        if ($stmt->execute()) {
+            // Check if any rows were affected
+            if ($stmt->affected_rows > 0) {
+                //success message
+                $retValue = json_encode(["message" => "Contact deleted."]);
+                sendResultInfoAsJson($retValue);
+            } else {
+                returnWithError("Contact not found.");
             }
-            else{
-                returnWithError("Error: Something went Wrong." . $stmt->error);
-            }
+        } else {
+            // Return error message
+            returnWithError("Error deleting contact: " . $stmt->error);
         }
 
         $stmt->close();
         $conn->close();
     }
-
-
-
-?> 
+?>
+ 

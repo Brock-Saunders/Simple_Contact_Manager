@@ -198,10 +198,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
-
-
-
 function deleteContact(button) {
     const row = button.parentElement.parentElement;
     const contactId = row.getAttribute('data-contact-id');
