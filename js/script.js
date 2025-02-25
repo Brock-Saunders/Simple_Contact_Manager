@@ -128,7 +128,6 @@ loginForm.addEventListener('submit', (e) => {
                     firstName = response.firstName;
                     lastName = response.lastName;
                     loginCookie(userID);
-                    alert('Login successful!');
                     // Redirect to contact page
                     window.location.href = 'contact.html'
                 }
