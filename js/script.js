@@ -78,13 +78,13 @@ createUserForm.addEventListener('submit', (e) => {
         let jsonObject = JSON.parse(xhr.responseText);
         userID = jsonObject.userID;
         console.log("User created with ID:", userID);
-        createUserPopup.style.display = 'none';
       }
       else{
         displayError("Error: ", xhr.status, xhr.responseText);
       }
     }
     xhr.send(jsonPayload);
+  
 });
 
 function loginCookie(userID){
@@ -142,6 +142,7 @@ loginForm.addEventListener('submit', (e) => {
                     firstName = response.firstName;
                     lastName = response.lastName;
                     loginCookie(userID);
+                    alert('Login successful!');
                     // Redirect to contact page
                     window.location.href = 'contact.html'
                 }

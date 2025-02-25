@@ -10,6 +10,7 @@ const closeBtn = document.querySelector('.close-btn');
 const newContactForm = document.getElementById('newContactForm');
 const createUserForm = document.getElementById('createUserForm');
 
+
 //PHP ENDPOINTS
 let createEndPoint = `${urlBase}/Create.${extension}`;
 let addContactEndPoint = `${urlBase}/AddContact.${extension}`;
@@ -112,14 +113,15 @@ function addContact() {
     const phone = document.getElementById('newPhone').value.trim();
     const email = document.getElementById('newEmail').value.trim();
 
+    
+    const searchQuery = document.getElementById('searchInput').value.trim();
 
     // check input
     if (!firstName || !lastName || !phone || !email) {
-        alert("Pls fill in all fields.");
-        return; 
+        alert("Please fill in all fields.");
+        return;
     }
 
-    // making tmp object that has all these parameters
     let reqData = {
         UserID: userID, 
         FirstName: firstName,
@@ -128,49 +130,35 @@ function addContact() {
         Phone: phone,
     };
 
-    // changing it to JSON string
-    let jsonPayload = JSON.stringify( reqData );
-
-    // makes new request object
+    let jsonPayload = JSON.stringify(reqData);
     let xhr = new XMLHttpRequest();
-    // Set the endpoint for the request
     xhr.open("POST", addContactEndPoint, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
     try {
         xhr.onreadystatechange = function() {
-            // Check if the request is complete and successful
             if (this.readyState == 4 && this.status == 200) {
                 document.getElementById("addContactResult").innerHTML = "Contact has been added";
+                
+                if (searchQuery) {
+                    searchContact();
+                } else {
+                    fetchContacts();
+                }
             }
         };
-        xhr.send(jsonPayload); // Send the request with the JSON
-        fetchContacts();//fetch contacts after json sent
+        xhr.send(jsonPayload);
     } catch (err) {
-        // Handle any errors 
         document.getElementById("addContactResult").innerHTML = err.message;
     }
 
-    // make a new row in the contacts table
-    const tableBody = document.getElementById('contactsTableBody');
-    const newRow = tableBody.insertRow();
-    newRow.innerHTML = `
-        <td>${firstName}</td>
-        <td>${lastName}</td>
-        <td>${phone}</td>
-        <td>${email}</td>
-        <td>
-            <button class="primary-button update-btn" onclick="updateContact(this)">Update</button>
-            <button class="primary-button delete-btn" onclick="deleteContact(this)">Delete</button>
-        </td>
-    `;
-
-    // Clear the input feilds
+    // Clear input fields
     document.getElementById('newFirstName').value = '';
     document.getElementById('newLastName').value = '';
     document.getElementById('newPhone').value = '';
     document.getElementById('newEmail').value = '';
 }
+
 
 
 
@@ -337,7 +325,12 @@ function cancelEdit(button) {
 
 function searchContact() {
     const query = document.getElementById('searchInput').value.trim(); // Get the search input value when the button is clicked
-    const reqData = { search: query }; // Create the request data object
+    const reqData = { 
+        UserID: userID,
+        search: query 
+    };
+
+    let jsonPayload = JSON.stringify(reqData);
 
     const xhr = new XMLHttpRequest();
     xhr.open("POST", searchContactEndpoint, true);
@@ -364,7 +357,7 @@ function searchContact() {
     };
 
     // Send the request with the JSON payload
-    xhr.send(JSON.stringify(reqData));
+    xhr.send(jsonPayload);
 }
 
 function resetSearch() {
@@ -376,38 +369,42 @@ function resetSearch() {
 
 function updateContactsTable(contacts) {
     const tableBody = document.getElementById('contactsTableBody');
-    tableBody.innerHTML = ''; // Clear existing rows
+
+    // Preserve the "Add Contact" row
+    const addContactRow = document.getElementById('newContactRow');
+
+    // Clear only the contact rows, not the entire table
+    tableBody.innerHTML = '';
 
     if (contacts.length > 0) {
         contacts.forEach(contact => {
             const row = document.createElement('tr');
+            row.setAttribute('data-contact-id', contact.ContactID);
             row.innerHTML = `
                 <td>${contact.FirstName}</td>
                 <td>${contact.LastName}</td>
                 <td>${contact.Phone}</td>
                 <td>${contact.Email}</td>
+                <td>
+                    <button class="primary-button update-btn" onclick="updateContact(this)">Update</button>
+                    <button class="primary-button delete-btn" onclick="deleteContact(this)">Delete</button>
+                </td>
             `;
             tableBody.appendChild(row);
         });
     } else {
         const row = document.createElement('tr');
-        row.innerHTML = '<td colspan="4">No contacts found</td>';
+        row.innerHTML = '<td colspan="5">No contacts found</td>';
         tableBody.appendChild(row);
     }
 
-    // Add the "Add Contact" row back to the table
-    const addContactRow = document.createElement('tr');
-    addContactRow.innerHTML = `
-        <td><input type="text" id="newFirstName" placeholder="First Name"></td>
-        <td><input type="text" id="newLastName" placeholder="Last Name"></td>
-        <td><input type="tel" id="newPhone" placeholder="Phone Number"></td>
-        <td><input type="email" id="newEmail" placeholder="Email"></td>
-        <td>
-            <button class="primary-button" id="addContactBtn" onclick="addContact()">Add Contact</button>
-        </td>
-    `;
+    // Re-add the "Add Contact" row at the end
     tableBody.appendChild(addContactRow);
 }
+
+
+
+
 
 function displayError(message) {
     const errorContainer = document.getElementById('errorContainer');
