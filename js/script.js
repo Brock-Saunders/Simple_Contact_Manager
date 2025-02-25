@@ -66,13 +66,13 @@ createUserForm.addEventListener('submit', (e) => {
         let jsonObject = JSON.parse(xhr.responseText);
         userID = jsonObject.userID;
         console.log("User created with ID:", userID);
+        createUserPopup.style.display = 'none';
       }
       else{
         console.error("Error: ", xhr.status, xhr.responseText);
       }
     }
     xhr.send(jsonPayload);
-  
 });
 
 function loginCookie(userID){
