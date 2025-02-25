@@ -55,7 +55,12 @@ function fetchContacts() {
             let jsonObject = JSON.parse(xhr.responseText);
             if (jsonObject.Contacts) {
                 let tableBody = document.getElementById('contactsTableBody');
+                // Save the add contact row before clearing the table
+                let addContactRow = document.getElementById('newContactRow');
                 tableBody.innerHTML = '';
+                
+                // Add back the "Add Contact" row first
+                tableBody.appendChild(addContactRow);
 
                 if (jsonObject.Contacts.length > 0) {
                     jsonObject.Contacts.forEach(contact => {
@@ -74,11 +79,6 @@ function fetchContacts() {
                         tableBody.appendChild(row);
                     });
                 } 
-                else{
-                    let row = document.createElement('tr');
-                    row.innerHTML = '<td colspan="5">No Friends?</td>';
-                    tableBody.appendChild(row);
-                }
             } 
             else {
                 console.error("no contacts");
@@ -107,19 +107,11 @@ let isAddContactListenerAdded = false; // Flag to check if listener is added
 
 // add a new contact
 function addContact() {
-    console.log("addContact function called."); // Debugging line
     const firstName = document.getElementById('newFirstName').value.trim();
     const lastName = document.getElementById('newLastName').value.trim();
     const phone = document.getElementById('newPhone').value.trim();
     const email = document.getElementById('newEmail').value.trim();
 
-    // Log the values retrieved
-    console.log("First Name:", firstName);
-    console.log("Last Name:", lastName);
-    console.log("Phone:", phone);
-    console.log("Email:", email);
-
-    //debugger;
 
     // check input
     if (!firstName || !lastName || !phone || !email) {
@@ -153,6 +145,7 @@ function addContact() {
             }
         };
         xhr.send(jsonPayload); // Send the request with the JSON
+        fetchContacts();//fetch contacts after json sent
     } catch (err) {
         // Handle any errors 
         document.getElementById("addContactResult").innerHTML = err.message;
@@ -185,10 +178,8 @@ function addContact() {
 document.addEventListener('DOMContentLoaded', () => {
     // the Add Contact button
     const addContactBtn = document.getElementById('addContactBtn');
-    alert("in event listener");
 
     if (addContactBtn) {
-        console.log("Adding event listener for addContactBtn"); // Debugging line
         //addContactBtn.addEventListener('click', addContact);
     }
     const searchButton = document.getElementById('searchButton'); 
@@ -212,7 +203,10 @@ function deleteContact(button) {
         ContactID: contactId
     };
 
-    let xhr = new XMLHttpRequest();
+    console.log(row.getAttribute('data-contact-id'));
+    console.log(reqData);
+
+    let xhr = new XMLHttpRequest(); 
     xhr.open("POST", deleteContactEndpoint, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
@@ -388,7 +382,6 @@ function resetSearch() {
 function updateContactsTable(contacts) {
     const tableBody = document.getElementById('contactsTableBody');
     tableBody.innerHTML = ''; // Clear existing rows
-    alert("in updateContactsTable"+tableBody);
 
     if (contacts.length > 0) {
         contacts.forEach(contact => {
