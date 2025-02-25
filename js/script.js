@@ -34,10 +34,22 @@ window.addEventListener('click', (e) => {
         createUserPopup.style.display = 'none';
     }
 });
+
+function displayError(message) {
+    const errorContainer = document.getElementById('errorContainer');
+    errorContainer.innerText = message;
+    errorContainer.style.display = 'block';
+}
+
+function hideError() {
+    const errorContainer = document.getElementById('errorContainer');
+    errorContainer.style.display = 'none';
+}
  
 // Handle create form submission
 createUserForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    hideError(); // Hide any previous errors
   
     firstName = document.getElementById('firstName').value;
     lastName = document.getElementById('lastName').value;
@@ -68,7 +80,7 @@ createUserForm.addEventListener('submit', (e) => {
         console.log("User created with ID:", userID);
       }
       else{
-        console.error("Error: ", xhr.status, xhr.responseText);
+        displayError("Error: ", xhr.status, xhr.responseText);
       }
     }
     xhr.send(jsonPayload);
@@ -110,6 +122,8 @@ loginForm.addEventListener('submit', (e) => {
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
 
+    if(!username || !password) displayError("Must have both fields");
+
     let xhr = new XMLHttpRequest();
     let url = urlBase + '/Login.' + extension;
 
@@ -122,7 +136,7 @@ loginForm.addEventListener('submit', (e) => {
             
             if (xhr.status === 200) {
                 if (response.error) {
-                    alert(response.error);
+                    displayError(response.error);
                 } else {
                     userID = response.userID;
                     firstName = response.firstName;
@@ -133,7 +147,7 @@ loginForm.addEventListener('submit', (e) => {
                     window.location.href = 'contact.html'
                 }
             } else {
-                alert('Error logging in. Please try again.');
+                displayError('Error logging in. Please try again.');
                 console.error(xhr.statusText);
             }
         }
