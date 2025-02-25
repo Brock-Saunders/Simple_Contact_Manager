@@ -55,7 +55,12 @@ function fetchContacts() {
             let jsonObject = JSON.parse(xhr.responseText);
             if (jsonObject.Contacts) {
                 let tableBody = document.getElementById('contactsTableBody');
+                // Save the add contact row before clearing the table
+                let addContactRow = document.getElementById('newContactRow');
                 tableBody.innerHTML = '';
+                
+                // Add back the "Add Contact" row first
+                tableBody.appendChild(addContactRow);
 
                 if (jsonObject.Contacts.length > 0) {
                     jsonObject.Contacts.forEach(contact => {
@@ -74,11 +79,6 @@ function fetchContacts() {
                         tableBody.appendChild(row);
                     });
                 } 
-                else{
-                    let row = document.createElement('tr');
-                    row.innerHTML = '<td colspan="5">No Friends?</td>';
-                    tableBody.appendChild(row);
-                }
             } 
             else {
                 console.error("no contacts");
