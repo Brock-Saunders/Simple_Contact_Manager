@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let jsonObject = JSON.parse(xhr.responseText);
             userID = jsonObject.userID;
             console.log("User created with ID:", userID);
+            createUserPopup.style.display = 'none';
         }
         else{
             displayError("Error: ", xhr.status, xhr.responseText);
