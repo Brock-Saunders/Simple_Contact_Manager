@@ -343,7 +343,12 @@ function cancelEdit(button) {
 
 function searchContact() {
     const query = document.getElementById('searchInput').value.trim(); // Get the search input value when the button is clicked
-    const reqData = { search: query }; // Create the request data object
+    const reqData = { 
+        UserID: userID,
+        search: query 
+    };
+
+    let jsonPayload = JSON.stringify(reqData);
 
     const xhr = new XMLHttpRequest();
     xhr.open("POST", searchContactEndpoint, true);
@@ -370,7 +375,7 @@ function searchContact() {
     };
 
     // Send the request with the JSON payload
-    xhr.send(JSON.stringify(reqData));
+    xhr.send(jsonPayload);
 }
 
 function resetSearch() {
