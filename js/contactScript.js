@@ -107,19 +107,11 @@ let isAddContactListenerAdded = false; // Flag to check if listener is added
 
 // add a new contact
 function addContact() {
-    console.log("addContact function called."); // Debugging line
     const firstName = document.getElementById('newFirstName').value.trim();
     const lastName = document.getElementById('newLastName').value.trim();
     const phone = document.getElementById('newPhone').value.trim();
     const email = document.getElementById('newEmail').value.trim();
 
-    // Log the values retrieved
-    console.log("First Name:", firstName);
-    console.log("Last Name:", lastName);
-    console.log("Phone:", phone);
-    console.log("Email:", email);
-
-    //debugger;
 
     // check input
     if (!firstName || !lastName || !phone || !email) {
@@ -185,10 +177,8 @@ function addContact() {
 document.addEventListener('DOMContentLoaded', () => {
     // the Add Contact button
     const addContactBtn = document.getElementById('addContactBtn');
-    alert("in event listener");
 
     if (addContactBtn) {
-        console.log("Adding event listener for addContactBtn"); // Debugging line
         //addContactBtn.addEventListener('click', addContact);
     }
     const searchButton = document.getElementById('searchButton'); 
@@ -383,7 +373,6 @@ function resetSearch() {
 function updateContactsTable(contacts) {
     const tableBody = document.getElementById('contactsTableBody');
     tableBody.innerHTML = ''; // Clear existing rows
-    alert("in updateContactsTable"+tableBody);
 
     if (contacts.length > 0) {
         contacts.forEach(contact => {
