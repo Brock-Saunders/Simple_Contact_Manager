@@ -79,15 +79,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if(this.readyState == 4 && this.status == 200){
             let jsonObject = JSON.parse(xhr.responseText);
             userID = jsonObject.userID;
-            console.log("User created with ID:", userID);
-            createUserPopup.style.display = 'none';
+            if (jsonObject.error) {
+                displayError(jsonObject.error);
+            } else {
+                userID = jsonObject.userID;
+                createUserPopup.style.display = 'none';
+            }
         }
         else{
             displayError("Error: ", xhr.status, xhr.responseText);
         }
         }
         xhr.send(jsonPayload);
-    
     });
 
     function loginCookie(userID){
@@ -125,7 +128,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let username = document.getElementById('username').value;
         let password = document.getElementById('password').value;
 
-        if(!username || !password) displayError("Must have both fields");
+        if(!username || !password) {
+            displayError("Must have both fields");
+            return;
+        }
 
         let xhr = new XMLHttpRequest();
         let url = urlBase + '/Login.' + extension;
