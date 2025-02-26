@@ -87,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         }
         xhr.send(jsonPayload);
-    
     });
 
     function loginCookie(userID){
