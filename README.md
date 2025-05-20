@@ -1,3 +1,2 @@
-# SmallProject_09
-### Make sure to pull before starting to work on the project 
-# Hello World
+# SmallProject_09 - Simple Pokemon Themed Contact Manager
+Made collaboratively for POOSD (COP 4331C) using the LAMP stack.
